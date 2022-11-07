@@ -1,0 +1,7 @@
+# Rename this file to .env and fill in bit.io credentials as required.
+BITDOTIO_DB_NAME=<bitdotio_db_name>
+BITDOTIO_USER=<bitdotio_username>
+BITDOTIO_PASSWORD=<bitdotio_password>
+BITDOTIO_HOST=db.bit.io
+BITDOTIO_PORT=5432
+APP_NAME=rep-tracker

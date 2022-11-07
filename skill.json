@@ -1,0 +1,78 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "summary": "Track reps for common body weight exercises.",
+          "examplePhrases": [
+            "Alexa open rep tracker and track five pushups",
+            "Alexa open rep tracker"
+          ],
+          "keywords": [
+            "bodyweight",
+            "murphy",
+            "reps"
+          ],
+          "name": "Rep Tracker",
+          "description": "Track reps for common body weight exercises.",
+          "smallIconUri": "file://assets/images/en-US_smallIconUri.png",
+          "largeIconUri": "file://assets/images/en-US_largeIconUri.png"
+        }
+      },
+      "automaticDistribution": {
+        "sourceLocaleForLanguages": [
+          {
+            "sourceLocale": "en-US",
+            "language": "en"
+          }
+        ],
+        "isActive": true
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Only available for private beta testing for now.",
+      "category": "HEALTH_AND_FITNESS",
+      "distributionMode": "PUBLIC",
+      "distributionCountries": []
+    },
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "arn:aws:lambda:us-west-2:244608958971:function:3c1b390e-dfde-4567-bf8f-ea7aefbfd7d1:Release_0"
+        },
+        "interfaces": [],
+        "regions": {
+          "EU": {
+            "endpoint": {
+              "uri": "arn:aws:lambda:eu-west-1:244608958971:function:3c1b390e-dfde-4567-bf8f-ea7aefbfd7d1:Release_0"
+            }
+          },
+          "NA": {
+            "endpoint": {
+              "uri": "arn:aws:lambda:us-east-1:244608958971:function:3c1b390e-dfde-4567-bf8f-ea7aefbfd7d1:Release_0"
+            }
+          },
+          "FE": {
+            "endpoint": {
+              "uri": "arn:aws:lambda:us-west-2:244608958971:function:3c1b390e-dfde-4567-bf8f-ea7aefbfd7d1:Release_0"
+            }
+          }
+        }
+      }
+    },
+    "manifestVersion": "1.0",
+    "privacyAndCompliance": {
+      "allowsPurchases": false,
+      "locales": {
+        "en-US": {}
+      },
+      "containsAds": false,
+      "isExportCompliant": true,
+      "isChildDirected": false,
+      "shoppingKit": {
+        "isShoppingActionsEnabled": false,
+        "isAmazonAssociatesOnAlexaEnabled": false
+      },
+      "usesPersonalInfo": false
+    }
+  }
+}

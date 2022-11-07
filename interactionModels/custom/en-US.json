@@ -1,0 +1,105 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "rep tracker",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "CreateRepsIntent",
+          "slots": [
+            {
+              "name": "quantity",
+              "type": "AMAZON.NUMBER"
+            },
+            {
+              "name": "exercise",
+              "type": "EXERCISE"
+            }
+          ],
+          "samples": [
+            "{quantity} {exercise}",
+            "track {quantity} {exercise}"
+          ]
+        },
+        {
+          "name": "AggregateRepsIntent",
+          "slots": [],
+          "samples": [
+            "total reps",
+            "get my reps",
+            "get today\u0027s reps",
+            "how many reps ",
+            "what are my reps"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "value": "rows",
+                "synonyms": [
+                  "row"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "squats",
+                "synonyms": [
+                  "squat"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "dips",
+                "synonyms": [
+                  "dip"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "pullups",
+                "synonyms": [
+                  "pullup"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "pushups",
+                "synonyms": [
+                  "pushup"
+                ]
+              }
+            }
+          ],
+          "name": "EXERCISE"
+        }
+      ]
+    }
+  },
+  "version": "9"
+}
