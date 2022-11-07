@@ -1,5 +1,5 @@
 # rep-tracker
-Hands-free rep tracking for common exercises using Alexa
+Hands-free rep tracking for common exercises using Alexa.
 
 # Contents
 This project is a quick POC and has several TODOs that I may or may not get to:
