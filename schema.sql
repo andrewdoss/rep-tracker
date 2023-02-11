@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS reps;
 DROP TABLE IF EXISTS goal_interval;
 DROP TABLE IF EXISTS exercise;
 
+CREATE EXTENSION IF NOT EXISTS tablefunc;
 
 CREATE TABLE exercise (
     id SERIAL PRIMARY KEY,
@@ -25,6 +26,7 @@ CREATE TABLE goal (
 
 CREATE TABLE reps (
     id SERIAL PRIMARY KEY,
+    device_id TEXT NOT NULL,
     date_created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     quantity INTEGER NOT NULL,
     exercise_id INTEGER NOT NULL REFERENCES exercise (id) ON DELETE CASCADE
@@ -32,11 +34,13 @@ CREATE TABLE reps (
 
 INSERT INTO exercise (name)
 VALUES
-  ('pushup'),
-  ('pullup'),
-  ('squat'),
-  ('dip'),
-  ('row');
+  ('pushups'),
+  ('pullups'),
+  ('squats'),
+  ('dips'),
+  ('rows'),
+  ('miles'),
+  ('burpees');
 
 INSERT INTO goal_interval (name, days)
 VALUES

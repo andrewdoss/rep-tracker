@@ -29,7 +29,7 @@
         "isActive": true
       },
       "isAvailableWorldwide": true,
-      "testingInstructions": "Only available for private beta testing for now.",
+      "testingInstructions": "This is a personal beta test for now. Later, I may add individual user auth at which point it will include a privacy policy and terms. This is purely an Alexa learning project at this point; however.",
       "category": "HEALTH_AND_FITNESS",
       "distributionMode": "PUBLIC",
       "distributionCountries": []

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import csv
+import io
 import logging
 import ask_sdk_core.utils as ask_utils
 
@@ -31,11 +33,13 @@ class LaunchRequestHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
             
         speak_output = "Welcome to Rep Tracker!"
+        ask_output = "You can say track followed by a quantity and exercise " \
+                       "name, or ask for your total reps for today."
 
         return (
             handler_input.response_builder
                 .speak(speak_output)
-                .ask(speak_output)
+                .ask(ask_output)
                 .response
         )
 
@@ -50,19 +54,40 @@ class CreateRepsIntentHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
         quantity = ask_utils.request_util.get_slot(handler_input, "quantity").value
         exercise = ask_utils.request_util.get_slot(handler_input, "exercise").value
-        normalized_exercise = utils.normalize_exercise_name(exercise, "singular")
+        
+        device_timezone = utils.get_user_timezone(handler_input)
+        hashed_device_id = utils.get_hashed_device_id(handler_input)
         
         try:
-            db_utils.create_reps(quantity, normalized_exercise)
+            db_utils.create_reps(quantity, exercise, hashed_device_id)
             speak_output = f"{quantity} {exercise} tracked."
         except errors.UnrecognizedExerciseError:
             speak_output = f"I'm sorry. I don't recognize the exercise {exercise}."
+        ask_output = "Anything else?"
+        
+        # For now, very inefficiently write out the dataset for each insert
+        # TODO: should probably wrap this in a try-catch so user doesn't retry insert
+        # based on a failure to cache the daily aggregates to s3.
+        object_name = f"{hashed_device_id}.csv"
+        daily_reps = db_utils.get_daily_reps(
+            hashed_device_id,
+            device_timezone,
+        )
+        with io.StringIO() as f:
+            writer = csv.writer(f)
+            for row in daily_reps:
+                writer.writerow(row)
+            f.seek(0)
+            utils.put_s3_object(
+                object_name,
+                f.read().encode(),
+            )
 
 
         return (
             handler_input.response_builder
                 .speak(speak_output)
-                .ask(speak_output)
+                .ask(ask_output)
                 .response
         )
         
@@ -81,26 +106,30 @@ class AggregateRepsIntentHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         device_timezone = utils.get_user_timezone(handler_input)
-        reps = db_utils.get_todays_reps()
+        hashed_device_id = utils.get_hashed_device_id(handler_input)
+        reps = db_utils.get_todays_reps(
+            hashed_device_id,
+            device_timezone=device_timezone,
+        )
         
         if not reps:
             speak_output = "You don't have any reps yet today."
         else:
             speak_output = "Today, you've completed "
             for i, (exercise, quantity) in enumerate(reps):
-                normalized_exercise = utils.normalize_exercise_name(exercise, "plural")
-                speak_output_part = f"{quantity} {normalized_exercise}"
+                speak_output_part = f"{quantity} {exercise}"
                 if i == 0 and i == len(reps) - 1:
                     speak_output += speak_output_part + '.'
                 elif i < len(reps) - 1:
                     speak_output += speak_output_part + ", "
                 else:
                     speak_output += ' and ' + speak_output_part + '.'
+        ask_output = "Can I help with anything else?"
 
         return (
             handler_input.response_builder
                 .speak(speak_output)
-                .ask(speak_output)
+                .ask(ask_output)
                 .response
         )
 
@@ -119,7 +148,6 @@ class HelpIntentHandler(AbstractRequestHandler):
         return (
             handler_input.response_builder
                 .speak(speak_output)
-                .ask(speak_output)
                 .response
         )
 
@@ -141,6 +169,7 @@ class CancelOrStopIntentHandler(AbstractRequestHandler):
                 .response
         )
 
+
 class FallbackIntentHandler(AbstractRequestHandler):
     """Single handler for Fallback Intent."""
     def can_handle(self, handler_input):
@@ -155,6 +184,7 @@ class FallbackIntentHandler(AbstractRequestHandler):
         reprompt = "I didn't catch that. What can I help you with?"
 
         return handler_input.response_builder.speak(speech).ask(reprompt).response
+
 
 class SessionEndedRequestHandler(AbstractRequestHandler):
     """Handler for Session End."""
@@ -178,7 +208,7 @@ class IntentReflectorHandler(AbstractRequestHandler):
     """
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return ask_utils.is_request_type("IntentRequest")(handler_input)
+        return ask_utils.is_request_type("IntentRequest")(handler_input)     
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response

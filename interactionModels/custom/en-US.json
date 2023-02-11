@@ -57,6 +57,11 @@
           "values": [
             {
               "name": {
+                "value": "burpees"
+              }
+            },
+            {
+              "name": {
                 "value": "rows",
                 "synonyms": [
                   "row"
@@ -101,5 +106,5 @@
       ]
     }
   },
-  "version": "9"
+  "version": "10"
 }
